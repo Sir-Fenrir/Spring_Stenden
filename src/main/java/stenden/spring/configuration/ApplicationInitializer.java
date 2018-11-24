@@ -1,23 +1,42 @@
 package stenden.spring.configuration;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+/**
+ * This is the replacement of the web.xml
+ */
+public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-public class ApplicationInitializer implements WebApplicationInitializer {
+    /**
+     * We accept all incoming requests starting at /
+     *
+     * @return All the mappings we accept
+     */
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
 
-    public void onStartup(ServletContext container) throws ServletException {
-        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.scan("stenden.spring.configuration");
-        container.addListener(new ContextLoaderListener(context));
+    /**
+     * The classes we use for configuring our ApplicationContext
+     *
+     * @return An array containing configuration classes for our ApplicationContext
+     */
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[]{WebConfig.class};
+    }
 
-        ServletRegistration.Dynamic dispatcher = container.addServlet("mvc", new DispatcherServlet(context));
-        dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/");
+    /**
+     * We have no special DispatcherServlet logic, so we do all the configuration in {@link WebConfig}
+     * It is useful if you have multiple DispatcherServlets and you want to specifically manage the different
+     * WebApplicationContexts
+     * https://stackoverflow.com/questions/35258758/getservletconfigclasses-vs-getrootconfigclasses-when-extending-abstractannot
+     *
+     * @return null, as it's not necessary for us.
+     */
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return null;
     }
 }
