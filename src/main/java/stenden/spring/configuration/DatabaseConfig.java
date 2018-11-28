@@ -11,7 +11,6 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -41,7 +40,7 @@ public class DatabaseConfig {
   public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
     LocalSessionFactoryBean sfb = new LocalSessionFactoryBean();
     sfb.setDataSource(dataSource);
-    sfb.setPackagesToScan("stenden.spring.hibernate");
+    sfb.setPackagesToScan("stenden.spring.data.hibernate");
     Properties props = new Properties();
     props.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
     sfb.setHibernateProperties(props);
@@ -49,7 +48,7 @@ public class DatabaseConfig {
   }
 
   @Bean
-  public PlatformTransactionManager transactionManager(SessionFactory sessionFactory){
+  public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
     HibernateTransactionManager transactionManager = new HibernateTransactionManager();
     transactionManager.setSessionFactory(sessionFactory);
     return transactionManager;

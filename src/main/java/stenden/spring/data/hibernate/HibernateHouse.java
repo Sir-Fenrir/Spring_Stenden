@@ -1,9 +1,10 @@
-package stenden.spring.hibernate;
+package stenden.spring.data.hibernate;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import stenden.spring.data.House;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "HOUSES")
 @Entity
-public class HibernateHouse {
+public class HibernateHouse implements House {
 
   @Id
   private Long id;

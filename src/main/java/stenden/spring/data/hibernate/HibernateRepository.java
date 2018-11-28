@@ -1,14 +1,16 @@
-package stenden.spring.hibernate;
+package stenden.spring.data.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import stenden.spring.data.House;
+import stenden.spring.data.HouseRepository;
 
 import javax.transaction.Transactional;
 
 @Repository
-public class HibernateRepository {
+public class HibernateRepository implements HouseRepository {
 
   private SessionFactory sessionFactory;
 
@@ -22,7 +24,7 @@ public class HibernateRepository {
   }
 
   @Transactional
-  public HibernateHouse getByID(Long id) {
+  public House getByID(Long id) {
     return currentSession().get(HibernateHouse.class, id);
   }
 

@@ -1,14 +1,16 @@
-package stenden.spring.jdbc;
+package stenden.spring.data.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
+import stenden.spring.data.House;
+import stenden.spring.data.HouseRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
-public class JdbcRepository {
+public class JdbcRepository implements HouseRepository {
 
   private static final String GET_HOUSE_BY_ID =
           "SELECT ID, NR_OF_FLOORS, NR_OF_ROOMS, STREET, CITY FROM HOUSES WHERE ID = ?";
@@ -20,7 +22,7 @@ public class JdbcRepository {
     this.jdbcOperations = jdbcOperations;
   }
 
-  public JdbcHouse getByID(Long id) {
+  public House getByID(Long id) {
     return jdbcOperations.queryForObject(GET_HOUSE_BY_ID, this::rowMapper, id);
   }
 
