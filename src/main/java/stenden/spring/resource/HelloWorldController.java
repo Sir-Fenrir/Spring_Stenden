@@ -1,10 +1,12 @@
 package stenden.spring.resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import stenden.spring.hibernate.HibernateHouse;
+import stenden.spring.hibernate.HibernateRepository;
+import stenden.spring.jdbc.JdbcHouse;
+import stenden.spring.jdbc.JdbcRepository;
 
 // We're telling Spring MVC that this is a REST controller
 // This treats methods with @RequestMapping as if it had the @ResponseBody annotation
@@ -14,16 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hello_world")
 public class HelloWorldController {
 
+    private JdbcRepository jdbcRepository;
+    private HibernateRepository hibernateRepository;
+
     // We have a greeting we read from the properties file using the Spring Expression Language
     @Value("${stenden.greeting}")
     private String greeting;
+
+    @Autowired
+    public HelloWorldController(JdbcRepository jdbcRepository, HibernateRepository hibernateRepository) {
+        this.jdbcRepository = jdbcRepository;
+        this.hibernateRepository = hibernateRepository;
+    }
 
     /**
      * Finally, your first endpoint! And this is a GET endpoint, as you can see in the annotation
      *
      * @return a message with a greeting
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public Message helloWorld() {
         return new Message(greeting);
     }
@@ -34,7 +45,7 @@ public class HelloWorldController {
      * @param name
      * @return
      */
-    @RequestMapping(path = "/custom", method = RequestMethod.GET)
+    @GetMapping("/custom")
     public Message customGreeting(@RequestParam("name") String name) {
         return new Message("Hello " + name + "!");
     }
@@ -44,8 +55,14 @@ public class HelloWorldController {
      *
      * @return This method will always fail!
      */
-    @RequestMapping(path = "/error", method = RequestMethod.GET)
+    @GetMapping("/error")
     public Message failedHelloWorld() {
         throw new GreetingException("I can't be bothered");
     }
+
+    @GetMapping("/houses/{id}")
+    public HibernateHouse getHouse(@PathVariable("id") Long id) {
+        return hibernateRepository.getByID(id);
+    }
+
 }
