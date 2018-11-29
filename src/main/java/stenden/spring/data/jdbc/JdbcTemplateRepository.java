@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
-public class JdbcRepository implements HouseRepository {
+public class JdbcTemplateRepository implements HouseRepository {
 
   private static final String GET_HOUSE_BY_ID =
           "SELECT ID, NR_OF_FLOORS, NR_OF_ROOMS, STREET, CITY FROM HOUSES WHERE ID = ?";
@@ -18,7 +18,7 @@ public class JdbcRepository implements HouseRepository {
   private JdbcOperations jdbcOperations;
 
   @Autowired
-  public JdbcRepository(JdbcOperations jdbcOperations) {
+  public JdbcTemplateRepository(JdbcOperations jdbcOperations) {
     this.jdbcOperations = jdbcOperations;
   }
 
