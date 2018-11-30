@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import stenden.spring.data.House;
 import stenden.spring.data.HouseRepository;
+import stenden.spring.data.jpa.SpringJpaRepository;
 
 // We're telling Spring MVC that this is a REST controller
 // This treats methods with @RequestMapping as if it had the @ResponseBody annotation
@@ -16,23 +17,48 @@ import stenden.spring.data.HouseRepository;
 @RequestMapping("/data")
 public class DataResource {
 
-  private final HouseRepository jdbcRepository;
+  private final HouseRepository jdbcTemplateRepository;
+  private final HouseRepository pureJdbcRepository;
   private final HouseRepository hibernateRepository;
+  private final HouseRepository entityManagerJpaRepository;
+  private final SpringJpaRepository springJpaRepository;
 
   @Autowired
-  public DataResource(HouseRepository jdbcRepository, HouseRepository hibernateRepository) {
-    this.jdbcRepository = jdbcRepository;
+  public DataResource(HouseRepository jdbcTemplateRepository,
+                      HouseRepository pureJdbcRepository,
+                      HouseRepository hibernateRepository,
+                      HouseRepository entityManagerJpaRepository,
+                      SpringJpaRepository springJpaRepository) {
+    this.jdbcTemplateRepository = jdbcTemplateRepository;
+    this.pureJdbcRepository = pureJdbcRepository;
     this.hibernateRepository = hibernateRepository;
+    this.entityManagerJpaRepository = entityManagerJpaRepository;
+    this.springJpaRepository = springJpaRepository;
   }
 
-  @GetMapping("/jdbc/{id}")
-  public House getJdbcHouse(@PathVariable("id") Long id) {
-    return jdbcRepository.getByID(id);
+  @GetMapping("/templatejdbc/{id}")
+  public House getTemplateJdbcHouse(@PathVariable("id") Long id) {
+    return jdbcTemplateRepository.getByID(id);
+  }
+
+  @GetMapping("/purejdbc/{id}")
+  public House getPureJdbcHouse(@PathVariable("id") Long id) {
+    return pureJdbcRepository.getByID(id);
   }
 
   @GetMapping("/hibernate/{id}")
   public House getHibernateHouse(@PathVariable("id") Long id) {
     return hibernateRepository.getByID(id);
+  }
+
+  @GetMapping("/jpa/{id}")
+  public House getJpaHouse(@PathVariable("id") Long id) {
+    return entityManagerJpaRepository.getByID(id);
+  }
+
+  @GetMapping("/springjpa/{id}")
+  public House getSpringJpaHouse(@PathVariable("id") Long id) {
+    return springJpaRepository.findById(id).get();
   }
 
 }

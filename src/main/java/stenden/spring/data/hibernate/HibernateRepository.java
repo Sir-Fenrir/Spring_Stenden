@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import stenden.spring.data.House;
 import stenden.spring.data.HouseRepository;
+import stenden.spring.data.model.AnnotatedHouse;
 
 import javax.transaction.Transactional;
 
@@ -25,7 +26,7 @@ public class HibernateRepository implements HouseRepository {
 
   @Transactional
   public House getByID(Long id) {
-    return currentSession().get(HibernateHouse.class, id);
+    return currentSession().get(AnnotatedHouse.class, id);
   }
 
 }

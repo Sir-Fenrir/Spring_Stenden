@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ExceptionHandlers {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(GreetingException.class)
-    public ErrorResponse handleGreetingException(GreetingException exception, HttpServletRequest request) {
-        return new ErrorResponse(String.format("I have the message '%s' for %s", exception.getMessage(), request.getRemoteAddr()));
-    }
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(GreetingException.class)
+  public ErrorResponse handleGreetingException(GreetingException exception, HttpServletRequest request) {
+    return new ErrorResponse(String.format("I have the message '%s' for %s", exception.getMessage(), request.getRemoteAddr()));
+  }
 
 }

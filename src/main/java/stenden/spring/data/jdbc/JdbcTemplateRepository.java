@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
 import stenden.spring.data.House;
 import stenden.spring.data.HouseRepository;
+import stenden.spring.data.model.POJOHouse;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,8 +27,8 @@ public class JdbcTemplateRepository implements HouseRepository {
     return jdbcOperations.queryForObject(GET_HOUSE_BY_ID, this::rowMapper, id);
   }
 
-  private JdbcHouse rowMapper(ResultSet rs, int rowNum) throws SQLException {
-    return new JdbcHouse(rs.getLong("ID"),
+  private POJOHouse rowMapper(ResultSet rs, int rowNum) throws SQLException {
+    return new POJOHouse(rs.getLong("ID"),
             rs.getInt("NR_OF_FLOORS"),
             rs.getInt("NR_OF_ROOMS"),
             rs.getString("STREET"),

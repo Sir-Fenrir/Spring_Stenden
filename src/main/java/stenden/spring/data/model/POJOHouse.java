@@ -1,4 +1,4 @@
-package stenden.spring.data.jdbc;
+package stenden.spring.data.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import stenden.spring.data.House;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JdbcHouse implements House {
+public class POJOHouse implements House {
 
   private Long id;
 

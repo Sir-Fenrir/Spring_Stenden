@@ -1,4 +1,4 @@
-package stenden.spring.data.hibernate;
+package stenden.spring.data.model;
 
 
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "HOUSES")
 @Entity
-public class HibernateHouse implements House {
+public class AnnotatedHouse implements House {
 
   @Id
   private Long id;

@@ -2,9 +2,11 @@ package stenden.spring.data.jdbc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Repository;
 import stenden.spring.data.House;
 import stenden.spring.data.HouseRepository;
+import stenden.spring.data.model.POJOHouse;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -33,7 +35,7 @@ public class PureJdbcRepository implements HouseRepository {
             ResultSet resultSet = statement.executeQuery()
     ) {
       resultSet.first();
-      return new JdbcHouse(
+      return new POJOHouse(
               resultSet.getLong("ID"),
               resultSet.getInt("NR_OF_FLOORS"),
               resultSet.getInt("NR_OF_ROOMS"),
@@ -43,15 +45,13 @@ public class PureJdbcRepository implements HouseRepository {
     } catch (SQLException e) {
       // Any kind of exception thrown is an SQLException. So it could be anything...
       log.error("The query failed!", e);
+      throw new UncategorizedSQLException("Querying for a house", GET_HOUSE_BY_ID, e);
     }
-
-    return null;
   }
 
   private PreparedStatement createPreparedStatement(Connection connection, Long id) throws SQLException {
-    try (PreparedStatement statement = connection.prepareStatement(GET_HOUSE_BY_ID)) {
-      statement.setLong(1, id);
-      return statement;
-    }
+    PreparedStatement statement = connection.prepareStatement(GET_HOUSE_BY_ID);
+    statement.setLong(1, id);
+    return statement;
   }
 }
