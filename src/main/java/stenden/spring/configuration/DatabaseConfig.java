@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -76,6 +77,17 @@ public class DatabaseConfig {
     transactionManager.setSessionFactory(sessionFactory);
     return transactionManager;
   }
+
+  /**
+   * Whhen just using JPA, you could also use this transaction manager.
+   * @return
+   */
+//  @Bean
+//  public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
+//    JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+//    jpaTransactionManager.setEntityManagerFactory(entityManagerFactoryBean.getObject());
+//    return jpaTransactionManager;
+//  }
 
   @Bean
   public BeanPostProcessor persistenceTranslation() {
