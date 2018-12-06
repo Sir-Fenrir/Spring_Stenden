@@ -1,6 +1,8 @@
 package stenden.spring.resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,13 @@ public class HelloWorldResource {
   @Value("${stenden.greeting}")
   private String greeting;
 
+  private JmsTemplate jmsTemplate;
+
+  @Autowired
+  public HelloWorldResource(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
   /**
    * Finally, your first endpoint! And this is a GET endpoint, as you can see in the annotation
    *
@@ -25,7 +34,9 @@ public class HelloWorldResource {
    */
   @GetMapping
   public Message helloWorld() {
-    return new Message(greeting);
+    Message message = new Message(greeting);
+    jmsTemplate.convertAndSend(message);
+    return message;
   }
 
   /**

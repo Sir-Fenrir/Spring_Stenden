@@ -43,6 +43,13 @@
             <version>${spring-data-jpa.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+
         <!--Necessary for writing our initialization code-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -83,6 +90,13 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.3.7.Final</version>
+        </dependency>
+
+        <!--To connect with ActiveMQ-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.15.8</version>
         </dependency>
 
     </dependencies>
