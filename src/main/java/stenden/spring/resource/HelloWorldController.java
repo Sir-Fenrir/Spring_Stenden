@@ -1,10 +1,9 @@
 package stenden.spring.resource;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 // We're telling Spring MVC that this is a REST controller
 // This treats methods with @RequestMapping as if it had the @ResponseBody annotation
@@ -47,5 +46,10 @@ public class HelloWorldController {
     @RequestMapping(path = "/error", method = RequestMethod.GET)
     public Message failedHelloWorld() {
         throw new GreetingException("I can't be bothered");
+    }
+
+    @PostMapping("/uppercase")
+    public Message upperCase(@RequestBody @Valid Message message) {
+        return new Message(message.getMessage().toUpperCase());
     }
 }
