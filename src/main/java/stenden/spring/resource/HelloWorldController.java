@@ -22,7 +22,7 @@ public class HelloWorldController {
      *
      * @return a message with a greeting
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public Message helloWorld() {
         return new Message(greeting);
     }
@@ -33,7 +33,7 @@ public class HelloWorldController {
      * @param name
      * @return
      */
-    @RequestMapping(path = "/custom", method = RequestMethod.GET)
+    @GetMapping("/custom")
     public Message customGreeting(@RequestParam("name") String name) {
         return new Message("Hello " + name + "!");
     }
@@ -43,7 +43,7 @@ public class HelloWorldController {
      *
      * @return This method will always fail!
      */
-    @RequestMapping(path = "/error", method = RequestMethod.GET)
+    @GetMapping("/error")
     public Message failedHelloWorld() {
         throw new GreetingException("I can't be bothered");
     }

@@ -39,14 +39,6 @@
             <version>2.9.7</version>
         </dependency>
 
-        <!--To prevent duplicate code-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!--For managing our logging-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
