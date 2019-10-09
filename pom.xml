@@ -32,32 +32,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--We want to serialize to and deserialize from JSON-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.7</version>
-        </dependency>
-
-        <!--To prevent duplicate code-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!--For managing our logging-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.1.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>6.0.17.Final</version>
         </dependency>
 
     </dependencies>
