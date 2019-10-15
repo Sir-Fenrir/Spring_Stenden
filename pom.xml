@@ -52,11 +52,34 @@
             <version>6.0.17.Final</version>
         </dependency>
 
+        <!--This is the library we use for testing our applications-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Support for testing Spring applications-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.9.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-            <!--We need to package to WAR files to deploy a Java web application-->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
+            <!--We need to package to WAR files to deploy a Java web application
+            Maven can do this by default, but as we're not using a web.xml we need
+            to inform the Maven War plugin of this.-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -65,6 +88,13 @@
                     <!--You used to need a web.xml file, but now we can do it with just Java-->
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
+            </plugin>
+
+            <!--To support JUnit 5 with the Maven Surefire plugin, we need to use the newest version
+            By default maven uses an older version-->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
             </plugin>
 
             <!--We want to deploy our web application and we're using Tomcat for that-->
