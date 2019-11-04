@@ -15,8 +15,16 @@ public class ExceptionHandlers {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(GreetingException.class)
-  public ErrorResponse handleGreetingException(GreetingException exception, HttpServletRequest request) {
-    return new ErrorResponse(String.format("I have the message '%s' for %s", exception.getMessage(), request.getRemoteAddr()));
+  public ErrorResponse handleGreetingException(
+          GreetingException exception,
+          HttpServletRequest request
+  ) {
+    String response = String.format(
+            "I have the message '%s' for %s",
+            exception.getMessage(),
+            request.getRemoteAddr()
+    );
+    return new ErrorResponse(response);
   }
 
 }
