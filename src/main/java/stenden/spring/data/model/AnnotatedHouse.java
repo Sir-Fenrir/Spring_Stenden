@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import stenden.spring.data.House;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +30,7 @@ public class AnnotatedHouse implements House {
   private String street;
 
   @Column(name = "CITY")
+  @Size(max = 5)
   private String city;
 
 }

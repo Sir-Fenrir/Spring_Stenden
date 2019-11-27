@@ -6,6 +6,8 @@ import stenden.spring.data.House;
 import stenden.spring.data.model.AnnotatedHouse;
 import stenden.spring.service.HouseService;
 
+import javax.validation.Valid;
+
 // We're telling Spring MVC that this is a REST controller
 // This treats methods with @RequestMapping as if it had the @ResponseBody annotation
 // which tells Spring that the return value should be transformed into a response
@@ -27,7 +29,7 @@ public class HouseResource {
   }
 
   @PostMapping
-  public House postJpaHouse(@RequestBody AnnotatedHouse house) {
+  public House postJpaHouse(@RequestBody @Valid AnnotatedHouse house) {
     return houseService.addHouse(house);
   }
 
