@@ -4,16 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
-@EnableTransactionManagement // Required for Hibernate
-@EnableJpaRepositories("stenden.spring.data")
 public class DatabaseConfig {
 
     /**
