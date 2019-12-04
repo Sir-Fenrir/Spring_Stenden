@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import stenden.spring.data.House;
+import stenden.spring.data.model.House;
 import stenden.spring.service.HouseService;
 
 // We're telling Spring MVC that this is a REST controller
@@ -16,36 +16,16 @@ import stenden.spring.service.HouseService;
 @RequestMapping("/data")
 public class HouseResource {
 
-  private final HouseService houseService;
+    private final HouseService houseService;
 
-  @Autowired
-  public HouseResource(HouseService houseService) {
-    this.houseService = houseService;
-  }
+    @Autowired
+    public HouseResource(HouseService houseService) {
+        this.houseService = houseService;
+    }
 
-  @GetMapping("/templatejdbc/{id}")
-  public House getTemplateJdbcHouse(@PathVariable("id") Long id) {
-    return houseService.getTemplateJdbcHouse(id);
-  }
-
-  @GetMapping("/purejdbc/{id}")
-  public House getPureJdbcHouse(@PathVariable("id") Long id) {
-    return houseService.getPureJdbcHouse(id);
-  }
-
-  @GetMapping("/hibernate/{id}")
-  public House getHibernateHouse(@PathVariable("id") Long id) {
-    return houseService.getHibernateHouse(id);
-  }
-
-  @GetMapping("/jpa/{id}")
-  public House getJpaHouse(@PathVariable("id") Long id) {
-    return houseService.getJpaHouse(id);
-  }
-
-  @GetMapping("/springjpa/{id}")
-  public House getSpringJpaHouse(@PathVariable("id") Long id) {
-    return houseService.getSpringJpaHouse(id);
-  }
+    @GetMapping("/templatejdbc/{id}")
+    public House getTemplateJdbcHouse(@PathVariable("id") Long id) {
+        return houseService.getTemplateJdbcHouse(id);
+    }
 
 }
