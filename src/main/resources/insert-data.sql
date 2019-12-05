@@ -1,2 +1,5 @@
 INSERT INTO HOUSES (NR_OF_FLOORS, NR_OF_ROOMS, STREET, CITY)
 VALUES (4, 12, 'Ubbo Emmiussingel 112', 'Groningen');
+
+INSERT INTO USERS (USERNAME, PASSWORD, ENABLED, ROLE)
+VALUES ('user', '$2a$10$gLqaddEO8/NDnDDuwyhaEePlq9DK4bb/xYyyxyg94lk7gCysbkz8K', true, 'ROLE_USER');
