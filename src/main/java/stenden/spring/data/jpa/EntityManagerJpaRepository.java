@@ -16,24 +16,24 @@ import javax.transaction.Transactional;
 @NoArgsConstructor
 public class EntityManagerJpaRepository implements HouseRepository {
 
-  /**
-   * This gives us an EntityManager.
-   * Or, well, a proxy to one. Which gives or creates a thread-safe EntityManager for us
-   * every time we use it.
-   */
-  @PersistenceContext(unitName = "entityManagerFactory")
-  private EntityManager em;
+    /**
+     * This gives us an EntityManager.
+     * Or, well, a proxy to one. Which gives or creates a thread-safe EntityManager for us
+     * every time we use it.
+     */
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager em;
 
-  @Override
-  @Transactional
-  public House getByID(Long id) {
-    return em.find(AnnotatedHouse.class, id);
-  }
+    @Override
+    @Transactional
+    public House getByID(Long id) {
+        return em.find(AnnotatedHouse.class, id);
+    }
 
-  @Override
-  @Transactional
-  public House addHouse(House house) {
-    em.persist(house);
-    return house;
-  }
+    @Override
+    @Transactional
+    public House addHouse(House house) {
+        em.persist(house);
+        return house;
+    }
 }

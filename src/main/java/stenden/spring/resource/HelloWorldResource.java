@@ -14,39 +14,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hello_world")
 public class HelloWorldResource {
 
-  // We have a greeting we read from the properties file using the Spring Expression Language
-  @Value("${stenden.greeting}")
-  private String greeting;
+    // We have a greeting we read from the properties file using the Spring Expression Language
+    @Value("${stenden.greeting}")
+    private String greeting;
 
-  /**
-   * Finally, your first endpoint! And this is a GET endpoint, as you can see in the annotation
-   *
-   * @return a message with a greeting
-   */
-  @GetMapping
-  public Message helloWorld() {
-    return new Message(greeting);
-  }
+    /**
+     * Finally, your first endpoint! And this is a GET endpoint, as you can see in the annotation
+     *
+     * @return a message with a greeting
+     */
+    @GetMapping
+    public Message helloWorld() {
+        return new Message(greeting);
+    }
 
-  /**
-   * Now let's grab a parameter from the URL
-   *
-   * @param name
-   * @return
-   */
-  @GetMapping("/custom")
-  public Message customGreeting(@RequestParam("name") String name) {
-    return new Message("Hello " + name + "!");
-  }
+    /**
+     * Now let's grab a parameter from the URL
+     *
+     * @param name
+     * @return
+     */
+    @GetMapping("/custom")
+    public Message customGreeting(@RequestParam("name") String name) {
+        return new Message("Hello " + name + "!");
+    }
 
-  /**
-   * Let's demonstrate an exception
-   *
-   * @return This method will always fail!
-   */
-  @GetMapping("/error")
-  public Message failedHelloWorld() {
-    throw new GreetingException("I can't be bothered");
-  }
+    /**
+     * Let's demonstrate an exception
+     *
+     * @return This method will always fail!
+     */
+    @GetMapping("/error")
+    public Message failedHelloWorld() {
+        throw new GreetingException("I can't be bothered");
+    }
 
 }

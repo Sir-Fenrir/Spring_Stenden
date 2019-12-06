@@ -14,21 +14,21 @@ import stenden.spring.service.HouseService;
 @RequestMapping("/data")
 public class HouseResource {
 
-  private final HouseService houseService;
+    private final HouseService houseService;
 
-  @Autowired
-  public HouseResource(HouseService houseService) {
-    this.houseService = houseService;
-  }
+    @Autowired
+    public HouseResource(HouseService houseService) {
+        this.houseService = houseService;
+    }
 
-  @GetMapping("/jpa/{id}")
-  public House getJpaHouse(@PathVariable("id") Long id) {
-    return houseService.getJpaHouse(id);
-  }
+    @GetMapping("/jpa/{id}")
+    public House getJpaHouse(@PathVariable("id") Long id) {
+        return houseService.getJpaHouse(id);
+    }
 
-  @PostMapping
-  public House postJpaHouse(@RequestBody AnnotatedHouse house) {
-    return houseService.addHouse(house);
-  }
+    @PostMapping
+    public House postJpaHouse(@RequestBody AnnotatedHouse house) {
+        return houseService.addHouse(house);
+    }
 
 }

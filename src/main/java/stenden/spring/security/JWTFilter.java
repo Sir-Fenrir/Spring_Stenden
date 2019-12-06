@@ -11,14 +11,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * We use this filter to read and verify the JWT in the incoming HTTP Request.
+ */
 public class JWTFilter extends GenericFilterBean {
 
+    // We use the JWTProvider to verify tokens on incoming requests
     private JWTProvider jwtProvider;
 
     public JWTFilter(JWTProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
 
+    /**
+     * Execute the filter.
+     *
+     * @param request  The HTTP Request that triggered this whole chain
+     * @param response The response we'll be returning to the client
+     * @param chain    The filter chain.
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
