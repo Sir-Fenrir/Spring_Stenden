@@ -16,11 +16,12 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
-@EnableTransactionManagement // Required for Hibernate
+@EnableTransactionManagement
 @EnableLoadTimeWeaving
 public class DatabaseConfig {
 
@@ -41,16 +42,17 @@ public class DatabaseConfig {
   }
 
   /**
-   * Whhn just using JPA, you could also use this transaction manager.
+   * When just using JPA, you could also use this transaction manager.
    *
    * @return
    */
   @Bean
-  public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
+  public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
     JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-    jpaTransactionManager.setEntityManagerFactory(entityManagerFactoryBean.getObject());
+    jpaTransactionManager.setEntityManagerFactory(emf);
     return jpaTransactionManager;
   }
+
   @Bean
   public BeanPostProcessor persistenceTranslation() {
     return new PersistenceExceptionTranslationPostProcessor();
