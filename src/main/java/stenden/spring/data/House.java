@@ -2,24 +2,24 @@ package stenden.spring.data;
 
 public interface House {
 
-  Long getId();
+    Long getID();
 
-  void setId(Long id);
+    void setID(Long id);
 
-  Integer getNrOfFloors();
+    Integer getNrOfFloors();
 
-  void setNrOfFloors(Integer nrOfFloors);
+    void setNrOfFloors(Integer nrOfFloors);
 
-  Integer getNrOfRooms();
+    Integer getNrOfRooms();
 
-  void setNrOfRooms(Integer nrOfRooms);
+    void setNrOfRooms(Integer nrOfRooms);
 
-  String getStreet();
+    String getStreet();
 
-  void setStreet(String street);
+    void setStreet(String street);
 
-  String getCity();
+    String getCity();
 
-  void setCity(String city);
+    void setCity(String city);
 
 }

@@ -16,21 +16,23 @@ import javax.validation.constraints.Size;
 @Entity
 public class AnnotatedHouse implements House {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @ManyToMany
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long ID;
 
-  @Column(name = "NR_OF_FLOORS")
-  private Integer nrOfFloors;
+    @Column(name = "NR_OF_FLOORS")
+    private Integer nrOfFloors;
 
-  @Column(name = "NR_OF_ROOMS")
-  private Integer nrOfRooms;
+    @Column(name = "NR_OF_ROOMS")
+    private Integer nrOfRooms;
 
-  @Column(name = "STREET")
-  private String street;
+    @Column(name = "STREET")
+    private String street;
 
-  @Column(name = "CITY")
-  @Size(max = 5)
-  private String city;
+    @Column(name = "CITY")
+    @Size(max = 5)
+    private String city;
 
 }

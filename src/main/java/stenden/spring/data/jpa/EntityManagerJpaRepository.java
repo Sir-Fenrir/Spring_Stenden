@@ -21,36 +21,36 @@ import java.util.List;
 @NoArgsConstructor
 public class EntityManagerJpaRepository implements HouseRepository {
 
-  /**
-   * This gives us an EntityManager.
-   * Or, well, a proxy to one. Which gives or creates a thread-safe EntityManager for us
-   * every time we use it.
-   */
-  @PersistenceContext(unitName = "entityManagerFactory")
-  private EntityManager em;
+    /**
+     * This gives us an EntityManager.
+     * Or, well, a proxy to one. Which gives or creates a thread-safe EntityManager for us
+     * every time we use it.
+     */
+    @PersistenceContext(unitName = "entityManagerFactory")
+    protected EntityManager em;
 
-  @Override
-  @Transactional
-  public House getByID(Long id) {
-    TypedQuery<AnnotatedHouse> getAll = em.createQuery("SELECT e FROM AnnotatedHouse e", AnnotatedHouse.class);
-    List<AnnotatedHouse> resultList = getAll.getResultList();
+    @Override
+    @Transactional
+    public House getByID(Long id) {
+        TypedQuery<AnnotatedHouse> getAll = em.createQuery("SELECT e FROM AnnotatedHouse e", AnnotatedHouse.class);
+        List<AnnotatedHouse> resultList = getAll.getResultList();
 
-    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-    CriteriaQuery<AnnotatedHouse> query = criteriaBuilder.createQuery(AnnotatedHouse.class);
-    Root<AnnotatedHouse> from = query.from(AnnotatedHouse.class);
-    CriteriaQuery<AnnotatedHouse> select = query.select(from);
-    select.where(criteriaBuilder.equal(from.get("ID"), 1));
-    TypedQuery<AnnotatedHouse> query1 = em.createQuery(select);
-    List<AnnotatedHouse> resultList1 = query1.getResultList();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<AnnotatedHouse> query = criteriaBuilder.createQuery(AnnotatedHouse.class);
+        Root<AnnotatedHouse> from = query.from(AnnotatedHouse.class);
+        CriteriaQuery<AnnotatedHouse> select = query.select(from);
+        select.where(criteriaBuilder.equal(from.get("ID"), 1));
+        TypedQuery<AnnotatedHouse> query1 = em.createQuery(select);
+        List<AnnotatedHouse> resultList1 = query1.getResultList();
 
 
-    return em.find(AnnotatedHouse.class, id);
-  }
+        return em.find(AnnotatedHouse.class, id);
+    }
 
-  @Override
-  @Transactional
-  public House addHouse(House house) {
-    em.persist(house);
-    return house;
-  }
+    @Override
+    @Transactional
+    public House addHouse(House house) {
+        em.persist(house);
+        return house;
+    }
 }

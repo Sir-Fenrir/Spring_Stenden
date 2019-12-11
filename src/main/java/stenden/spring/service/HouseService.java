@@ -9,19 +9,19 @@ import stenden.spring.data.model.AnnotatedHouse;
 @Service
 public class HouseService {
 
-  private final HouseRepository entityManagerJpaRepository;
+    private final HouseRepository entityManagerJpaRepository;
 
-  @Autowired
-  public HouseService(HouseRepository entityManagerJpaRepository) {
-    this.entityManagerJpaRepository = entityManagerJpaRepository;
-  }
+    @Autowired
+    public HouseService(HouseRepository entityManagerJpaRepository) {
+        this.entityManagerJpaRepository = entityManagerJpaRepository;
+    }
 
-  public House getJpaHouse(Long id) {
-    return entityManagerJpaRepository.getByID(id);
-  }
+    public House getJpaHouse(Long id) {
+        return entityManagerJpaRepository.getByID(id);
+    }
 
-  public House addHouse(AnnotatedHouse house) {
-    return entityManagerJpaRepository.addHouse(house);
-  }
+    public House addHouse(AnnotatedHouse house) {
+        return entityManagerJpaRepository.addHouse(house);
+    }
 }
 
