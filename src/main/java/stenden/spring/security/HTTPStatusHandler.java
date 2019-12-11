@@ -6,6 +6,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class HTTPStatusHandler implements AuthenticationFailureHandler {
 
@@ -17,8 +18,9 @@ public class HTTPStatusHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) {
+                                        AuthenticationException exception) throws IOException {
         response.setStatus(status.value());
+        response.getWriter().write("{\"message\":\"Invalid credentials.\"}");
     }
 
 }

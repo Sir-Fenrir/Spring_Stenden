@@ -1,5 +1,6 @@
 package stenden.spring.security;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -41,7 +42,8 @@ public class JWTFilter extends GenericFilterBean {
             // If there was a token and it is valid (e.g.: not expired)
             if (token != null && jwtProvider.validateToken(token)) {
                 // Get the authentication instance and set it in the SecurityContext
-                SecurityContextHolder.getContext().setAuthentication(jwtProvider.getAuthentication(token));
+                Authentication authentication = jwtProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 // Check if the token is about to expire and we need to generate a fresh one
                 String newToken = jwtProvider.getRefreshToken(token);

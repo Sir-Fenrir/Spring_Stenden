@@ -7,6 +7,7 @@ import stenden.spring.data.HouseRepository;
 import stenden.spring.data.model.AnnotatedHouse;
 
 @Service
+
 public class HouseService {
 
     private final HouseRepository entityManagerJpaRepository;
