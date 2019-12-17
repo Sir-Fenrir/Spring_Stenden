@@ -210,10 +210,17 @@
                         <id>integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
-                            <goal>verify</goal>
                         </goals>
+                        <phase>integration-test</phase>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>3.0.0-M4</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
@@ -269,6 +276,22 @@
                         </artifactInstaller>
                     </container>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test-run</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                    </execution>
+                    <execution>
+                        <id>integration-test-stop</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <!--We're telling Maven we want to use Java 8. Do you want to use a newer version? You can!

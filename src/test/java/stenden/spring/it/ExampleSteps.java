@@ -35,7 +35,7 @@ public class ExampleSteps {
     @CitrusResource
     private TestRunner runner;
 
-    @When("^The client makes a GET request to  \"([^\"]*)\"$")
+    @When("^the client makes a GET request to \"([^\"]*)\"$")
     public void callUrl(String url) {
         runner.http(httpActionBuilder -> httpActionBuilder
                 .client("springAppClient")
@@ -43,75 +43,12 @@ public class ExampleSteps {
                 .get(url));
     }
 
-    @Then("^The HTTP status code should be (\\d+)$")
+    @Then("^the HTTP status code should be (\\d+)$")
     public void expectedHttpStatus(int status) {
         runner.http(httpActionBuilder -> httpActionBuilder
                 .client("springAppClient")
                 .receive()
                 .response(HttpStatus.valueOf(status)));
     }
-
-//    @Given("^Todo list is empty$")
-//    public void empty_todos() {
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .send()
-//            .delete("/api/todolist"));
-//
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .receive()
-//            .response(HttpStatus.OK));
-//    }
-//
-//    @When("^(?:I|user) adds? entry \"([^\"]*)\"$")
-//    public void add_entry(String todoName) {
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .send()
-//            .post("/todolist")
-//            .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//            .payload("title=" + todoName));
-//
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .receive()
-//            .response(HttpStatus.FOUND));
-//    }
-//
-//    @When("^(?:I|user) removes? entry \"([^\"]*)\"$")
-//    public void remove_entry(String todoName) throws UnsupportedEncodingException{
-//        String encoding = URLEncoder.encode(todoName, "UTF-8");
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .send()
-//            .delete("/api/todo?title=" + encoding));
-//
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .receive()
-//            .response(HttpStatus.OK)
-//            .messageType(MessageType.PLAINTEXT));
-//    }
-//
-//    @Then("^(?:the )?number of todo entries should be (\\d+)$")
-//    public void verify_todos(int todoCnt) {
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .send()
-//            .get("/api/todolist/count"));
-//
-//        runner.http(httpActionBuilder -> httpActionBuilder
-//            .client("todoListClient")
-//            .receive()
-//            .response(HttpStatus.OK)
-//            .messageType(MessageType.PLAINTEXT)
-//            .payload(String.valueOf(todoCnt)));
-//    }
-//
-//    @Then("^(?:the )?todo list should be empty$")
-//    public void verify_empty_todos() {
-//        verify_todos(0);
-//    }
 
 }
