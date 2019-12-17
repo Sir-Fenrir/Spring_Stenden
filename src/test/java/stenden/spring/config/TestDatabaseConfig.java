@@ -14,6 +14,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("stenden.spring.data.jpa")
+// This is necessary to make AspectJ use the 'default' Spring way of proxying, using subclasses intead of interfaces.
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class TestDatabaseConfig extends AbstractDatabaseConfig {
 
