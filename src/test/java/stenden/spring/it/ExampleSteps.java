@@ -16,8 +16,11 @@
 
 package stenden.spring.it;
 
+import com.consol.citrus.annotations.CitrusEndpoint;
 import com.consol.citrus.annotations.CitrusResource;
 import com.consol.citrus.dsl.runner.TestRunner;
+import com.consol.citrus.http.client.HttpClient;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.springframework.http.HttpStatus;
@@ -35,20 +38,34 @@ public class ExampleSteps {
     @CitrusResource
     private TestRunner runner;
 
+    @CitrusEndpoint
+    private HttpClient springAppClient;
+
+    @Given("^the user is authenticated with \"([^\"]*)\" and \"([^\"]*)\"$")
+    public void authenticate(String user, String password) {
+        System.out.println(user);
+        System.out.println(password);
+        // authenticate
+    }
+
     @When("^the client makes a GET request to \"([^\"]*)\"$")
     public void callUrl(String url) {
-        runner.http(httpActionBuilder -> httpActionBuilder
-                .client("springAppClient")
-                .send()
-                .get(url));
+        runner.http(
+                httpActionBuilder -> httpActionBuilder
+                        .client(springAppClient)
+                        .send()
+                        .get(url)
+        );
     }
 
     @Then("^the HTTP status code should be (\\d+)$")
     public void expectedHttpStatus(int status) {
-        runner.http(httpActionBuilder -> httpActionBuilder
-                .client("springAppClient")
-                .receive()
-                .response(HttpStatus.valueOf(status)));
+        runner.http(
+                httpActionBuilder -> httpActionBuilder
+                        .client(springAppClient)
+                        .receive()
+                        .response(HttpStatus.valueOf(status))
+        );
     }
 
 }
