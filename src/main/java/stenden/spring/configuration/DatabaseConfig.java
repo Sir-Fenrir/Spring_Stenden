@@ -61,33 +61,11 @@ public class DatabaseConfig {
     return new JdbcTemplate(dataSource);
   }
 
-//  @Bean
-//  public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-//    LocalSessionFactoryBean sfb = new LocalSessionFactoryBean();
-//    sfb.setDataSource(dataSource);
-//    sfb.setPackagesToScan("stenden.spring.data.model");
-//    Properties props = new Properties();
-//    props.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
-//    sfb.setHibernateProperties(props);
-//    return sfb;
-//  }
-
   @Bean
   public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
     return new JpaTransactionManager(entityManagerFactory);
   }
 
-  /**
-   * Whhn just using JPA, you could also use this transaction manager.
-   *
-   * @return
-   */
-//  @Bean
-//  public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
-//    JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-//    jpaTransactionManager.setEntityManagerFactory(entityManagerFactoryBean.getObject());
-//    return jpaTransactionManager;
-//  }
   @Bean
   public BeanPostProcessor persistenceTranslation() {
     return new PersistenceExceptionTranslationPostProcessor();
