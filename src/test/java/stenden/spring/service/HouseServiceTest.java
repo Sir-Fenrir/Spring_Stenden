@@ -28,9 +28,6 @@ public class HouseServiceTest {
     private HouseRepository pureJdbcRepository;
 
     @Mock
-    private HouseRepository hibernateRepository;
-
-    @Mock
     private HouseRepository entityManagerJpaRepository;
 
     @Mock
@@ -43,7 +40,6 @@ public class HouseServiceTest {
 //    public void setup() {
 //        jdbcTemplateRepository = mock(HouseRepository.class);
 //        pureJdbcRepository = mock(HouseRepository.class);
-//        hibernateRepository= mock(HouseRepository.class);
 //        entityManagerJpaRepository = mock(HouseRepository.class);
 //        springJpaRepository = mock(SpringJpaRepository.class);
 //        houseService = new HouseService(jdbcTemplateRepository, pureJdbcRepository, hibernateRepository, entityManagerJpaRepository, springJpaRepository);
