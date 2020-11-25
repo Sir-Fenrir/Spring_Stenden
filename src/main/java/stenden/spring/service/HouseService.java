@@ -13,19 +13,16 @@ public class HouseService {
 
   private final HouseRepository jdbcTemplateRepository;
   private final HouseRepository pureJdbcRepository;
-  private final HouseRepository hibernateRepository;
   private final HouseRepository entityManagerJpaRepository;
   private final SpringJpaRepository springJpaRepository;
 
   @Autowired
   public HouseService(HouseRepository jdbcTemplateRepository,
                       HouseRepository pureJdbcRepository,
-                      HouseRepository hibernateRepository,
                       HouseRepository entityManagerJpaRepository,
                       SpringJpaRepository springJpaRepository) {
     this.jdbcTemplateRepository = jdbcTemplateRepository;
     this.pureJdbcRepository = pureJdbcRepository;
-    this.hibernateRepository = hibernateRepository;
     this.entityManagerJpaRepository = entityManagerJpaRepository;
     this.springJpaRepository = springJpaRepository;
   }
@@ -36,10 +33,6 @@ public class HouseService {
 
   public House getPureJdbcHouse(Long id) {
     return pureJdbcRepository.getByID(id);
-  }
-
-  public House getHibernateHouse(Long id) {
-    return hibernateRepository.getByID(id);
   }
 
   public House getJpaHouse(Long id) {
