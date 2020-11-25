@@ -33,11 +33,6 @@ public class HouseResource {
     return houseService.getPureJdbcHouse(id);
   }
 
-  @GetMapping("/hibernate/{id}")
-  public House getHibernateHouse(@PathVariable("id") Long id) {
-    return houseService.getHibernateHouse(id);
-  }
-
   @GetMapping("/jpa/{id}")
   public House getJpaHouse(@PathVariable("id") Long id) {
     return houseService.getJpaHouse(id);

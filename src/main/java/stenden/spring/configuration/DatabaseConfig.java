@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -19,6 +20,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -60,34 +62,10 @@ public class DatabaseConfig {
   }
 
   @Bean
-  public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
-    LocalSessionFactoryBean sfb = new LocalSessionFactoryBean();
-    sfb.setDataSource(dataSource);
-    sfb.setPackagesToScan("stenden.spring.data.model");
-    Properties props = new Properties();
-    props.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
-    sfb.setHibernateProperties(props);
-    return sfb;
+  public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    return new JpaTransactionManager(entityManagerFactory);
   }
 
-  @Bean
-  public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
-    HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-    transactionManager.setSessionFactory(sessionFactory);
-    return transactionManager;
-  }
-
-  /**
-   * Whhn just using JPA, you could also use this transaction manager.
-   *
-   * @return
-   */
-//  @Bean
-//  public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
-//    JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-//    jpaTransactionManager.setEntityManagerFactory(entityManagerFactoryBean.getObject());
-//    return jpaTransactionManager;
-//  }
   @Bean
   public BeanPostProcessor persistenceTranslation() {
     return new PersistenceExceptionTranslationPostProcessor();
@@ -106,6 +84,15 @@ public class DatabaseConfig {
     entityManagerFactoryBean.setDataSource(dataSource);
     entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
     entityManagerFactoryBean.setPackagesToScan("stenden.spring.data.model");
+    entityManagerFactoryBean.setJpaProperties(additionalProperties());
     return entityManagerFactoryBean;
   }
+
+  private Properties additionalProperties() {
+    Properties properties = new Properties();
+    properties.setProperty("hibernate.hbm2ddl.auto", "none");
+    properties.setProperty("dialect", "org.hibernate.dialect.H2Dialect");
+    return properties;
+  }
+
 }
