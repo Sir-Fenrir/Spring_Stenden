@@ -6,6 +6,8 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -22,19 +24,21 @@ import java.sql.SQLException;
 @EnableTransactionManagement // Required for Hibernate
 public class DatabaseConfig {
 
-    /**
-     * The {@link DataSource} representing the database connection.
-     *
-     * @return The connection to the database
-     */
-    @Bean
-    public DataSource dataSource() throws SQLException {
-        MariaDbPoolDataSource dataSource = new MariaDbPoolDataSource();
-        dataSource.setUser("root");
-        dataSource.setPassword("root");
-        dataSource.setUrl("jdbc:mariadb://localhost:3306/example");
-        return dataSource;
-    }
+  /**
+   * The {@link DataSource} representing the database connection.
+   * In our case we're creating an in-memory database using H2,
+   * so the setup is simple.
+   *
+   * @return The connection to the database
+   */
+  @Bean
+  public DataSource dataSource() {
+    return new EmbeddedDatabaseBuilder()
+            .setType(EmbeddedDatabaseType.H2)
+            .addScript("classpath:schema.sql")
+            .addScript("classpath:insert-data.sql")
+            .build();
+  }
 
     /**
      * Whhn just using JPA, you could also use this transaction manager.

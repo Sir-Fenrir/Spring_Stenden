@@ -38,8 +38,16 @@ public class HouseControllerIntegrationTest {
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                .apply(springSecurity())
+                .apply(springSecurity()) // Required to enable Spring Security during the testing
                 .build();
+    }
+
+    @Test
+    public void testException() throws Exception {
+        mockMvc.perform(
+                get("/hello_world/error")
+                        .header("Authorization", "Bearer " + validJWT())
+        ).andDo((x -> System.out.println(x.getResponse().getContentAsString())));
     }
 
     @Test

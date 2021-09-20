@@ -151,23 +151,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // We'll allow logging in as if it were a form, using form headers
                 .formLogin()
-                // Everyone is allowed to reach this endpoint
-                .permitAll()
-                // If login fails, return a 401 instead of redirecting, as is normal for form login
-                .failureHandler(new HTTPStatusHandler(HttpStatus.UNAUTHORIZED))
-                // If login succeeds return a 200 instead of redirecting, as is normal for form login
-                // We also return a JSON Web Token
-                .successHandler(new JWTStatusHandler(jwtProvider))
+                    // Everyone is allowed to reach this endpoint
+                    .permitAll()
+                    // If login fails, return a 401 instead of redirecting, as is normal for form login
+                    .failureHandler(new HTTPStatusHandler(HttpStatus.UNAUTHORIZED))
+                    // If login succeeds return a 200 instead of redirecting, as is normal for form login
+                    // We also return a JSON Web Token
+                    .successHandler(new JWTStatusHandler(jwtProvider))
                 // Configuring the HttpSecurity object is done in steps, we just configured the formLogin,
                 // now we're continuing to exception handling. To signal this, we need to use and(),
                 // otherwise we'd still be trying to configure formLogin.
                 .and()
-                // What to do when it goes wrong?
-                .exceptionHandling()
-                // When the access is denied to a certain part of the application, use the given handler.
-                .accessDeniedHandler(restAccessDeniedHandler)
-                // When the authentication fails, use the given handler.
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
+                    // What to do when it goes wrong?
+                    .exceptionHandling()
+                        // When the access is denied to a certain part of the application, use the given handler.
+                        .accessDeniedHandler(restAccessDeniedHandler)
+                        // When the given JWT is invalid, use this handler.
+                        .authenticationEntryPoint(restAuthenticationEntryPoint);
 
         // We need to register our JWTFilter. We register it before the UsernamePasswordAuthenticationFilter,
         // as that is part of the group of filters where Spring expects updates to the SecurityContextHolder
