@@ -1,5 +1,6 @@
 package stenden.spring.resource;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import stenden.spring.data.House;
@@ -27,7 +28,7 @@ public class HouseResource {
     }
 
     @PostMapping
-    public House postJpaHouse(@RequestBody AnnotatedHouse house) {
+    public House postJpaHouse(@RequestBody @Valid AnnotatedHouse house) {
         return houseService.addHouse(house);
     }
 

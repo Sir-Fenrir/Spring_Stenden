@@ -22,11 +22,12 @@ import java.util.Arrays;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = WebConfig.class)
+@ContextConfiguration(classes = {WebConfig.class, TestConfig.class})
 @WebAppConfiguration
 public class HouseControllerIntegrationTest {
 
@@ -47,7 +48,22 @@ public class HouseControllerIntegrationTest {
         mockMvc.perform(
                 get("/hello_world/error")
                         .header("Authorization", "Bearer " + validJWT())
-        ).andDo((x -> System.out.println(x.getResponse().getContentAsString())));
+        ).andDo(print()); // This is not a valid test, just an example of doing a request in an Integration Test
+    }
+
+    @Test
+    public void testValidation() throws Exception {
+        mockMvc.perform(
+                post("/data")
+                        .header("Authorization", "Bearer " + validJWT())
+                        .content("{\n" +
+                                "  \"nrOfFloors\": 2,\n" +
+                                "  \"nrOfRooms\": 2,\n" +
+                                "  \"street\": \"yesbutno\",\n" +
+                                "  \"city\": \"no\"\n" +
+                                "}\n")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andDo(print()); // This is not a valid test, just an example of doing a request in an Integration Test
     }
 
     @Test
@@ -60,8 +76,8 @@ public class HouseControllerIntegrationTest {
     public void testRetrieveData() throws Exception {
         String jwt = validJWT();
         mockMvc.perform(
-                get("/data/jpa/1")
-                        .header("Authorization", "Bearer " + jwt))
+                        get("/data/jpa/1")
+                                .header("Authorization", "Bearer " + jwt))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(
                         content().string("{\"id\":1,\"nrOfFloors\":4,\"nrOfRooms\":12,\"street\":\"Ubbo Emmiussingel 112\",\"city\":\"Groningen\"}")
