@@ -9,15 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-public class RestAccessDeniedHandler implements AccessDeniedHandler {
+public class UserAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(
             HttpServletRequest request,
             HttpServletResponse response,
-            AccessDeniedException accessDeniedException) throws IOException, ServletException {
+            AccessDeniedException accessDeniedException) throws IOException {
         response.setStatus(403);
-        response.getWriter().write("{\"message\":\"You\'re not allowed in here.\"}");
-
+        response.getWriter().write("{\"message\":\"You're not allowed in here.\"}");
     }
 }

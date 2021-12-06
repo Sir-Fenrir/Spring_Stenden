@@ -24,21 +24,18 @@ import java.sql.SQLException;
 @EnableTransactionManagement // Required for Hibernate
 public class DatabaseConfig {
 
-  /**
-   * The {@link DataSource} representing the database connection.
-   * In our case we're creating an in-memory database using H2,
-   * so the setup is simple.
-   *
-   * @return The connection to the database
-   */
-  @Bean
-  public DataSource dataSource() {
-    return new EmbeddedDatabaseBuilder()
-            .setType(EmbeddedDatabaseType.H2)
-            .addScript("classpath:schema.sql")
-            .addScript("classpath:insert-data.sql")
-            .build();
-  }
+    /**
+     * The {@link DataSource} representing the database connection.
+     *
+     * @return The connection to the database
+     */
+    @Bean
+    public DataSource dataSource() throws SQLException {
+        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+                .addScript("classpath:schema.sql")
+                .addScript("classpath:insert-data.sql")
+                .build();
+    }
 
     /**
      * Whhn just using JPA, you could also use this transaction manager.

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
@@ -38,10 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
     @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    @Autowired
-    private RestAccessDeniedHandler restAccessDeniedHandler;
-    @Autowired
     private JWTProvider jwtProvider;
 
     /**
@@ -57,6 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * To expose an UserDetailService in our application,
      * we can just override this method from the superclass.
+     * It will then create an UserDetailsService based on the
+     * AuthenticationManagerBuilder which we're configuring in
+     * {@link #configure(AuthenticationManagerBuilder)}.
      * <p>
      * We can also create our own UserDetailService if we so desire,
      * to customize how users are retrieved!
@@ -71,10 +70,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * We create the JWTProvider bean, which
+     * We create the JWTProvider bean, which is used for generating and verifying JWT's.
      *
-     * @param userDetailsService
-     * @param secretKey
+     * @param userDetailsService For retrieving the user while creating the JWT.
+     * @param secretKey The phrase used to encode the JWT in such a way only we can produce it.
      * @return
      */
     @Bean
@@ -84,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * We're configuring the {@link AuthenticationManagerBuilder} to tell it where to get the users from.
-     * By default Spring expects certain tables to be present if you simpy use {@link AuthenticationManagerBuilder#jdbcAuthentication()}
+     * By default, Spring expects certain tables to be present if you simpy use {@link AuthenticationManagerBuilder#jdbcAuthentication()}
      * but you can customize that by giving your own queries, as shown in the method.
      * You still need to make sure the query returns the right columns.
      * You can also implement your own {@link UserDetailsService} where you'll retrieve users instead.
@@ -108,7 +107,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * In this method we get a {@link HttpSecurity} object we can use for configuring the security in our application.
+     * We expose the AuthenticationManager to our application, so we can use it to authenticate login requests
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    /**
+     * In this method we get a {@link HttpSecurity} object we can use for securing the access to our application.
+     * The previous ones were focused on the inner workings, but this one is for deciding what happens
+     * when a client sends us a message.
      * <p>
      * It's important to know that the top most configuration should be more specific than the bottom configuration.
      * If I say the url /admin is accessible by admins only and then say all the URLS are open for everyone,
@@ -121,22 +133,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // First we configure it to allow authentication and authorization in REST
+        // This is just a helper method made by me to split it up
         enableRESTAuthentication(http)
                 // Now let's say which requests we want to authorize
                 .authorizeRequests()
-                // Every single request needs to be authorized... with the exception of /login,
-                // which was defined in enableRESTAuthentication(), which was earlier and thus trumps this configuration.
-                .anyRequest()
-                // We require every user to have the role USER (this translates to 'ROLE_USER' in the database
-                // and in other places)
-                .hasRole("USER")
+                    // Every single request needs to be authorized... with the exception of /authorization,
+                    // which was defined in enableRESTAuthentication(), which was earlier and thus trumps this configuration.
+                    .anyRequest()
+                    // We require every user to have the role USER (this translates to 'ROLE_USER' in the database
+                    // and in other places)
+                    .hasRole("USER")
                 // Alright, we're done, let's move on to the next part using and()
                 .and()
-                // We're disabling defenses against Cross-Site Request Forgery,
-                // as the browser is not responsible for adding authentication information to the request
-                // which is wat the CSRF exploit relies on.
-                .csrf()
-                .disable();
+                    // We're disabling defenses against Cross-Site Request Forgery,
+                    // as the browser is not responsible for adding authentication information to the request
+                    // which is wat the CSRF exploit relies on.
+                    .csrf()
+                    .disable();
     }
 
     /**
@@ -149,25 +162,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private HttpSecurity enableRESTAuthentication(HttpSecurity http) throws Exception {
         http
-                // We'll allow logging in as if it were a form, using form headers
-                .formLogin()
-                    // Everyone is allowed to reach this endpoint
+                .authorizeRequests()
+                    .mvcMatchers("/authenticate")
                     .permitAll()
-                    // If login fails, return a 401 instead of redirecting, as is normal for form login
-                    .failureHandler(new HTTPStatusHandler(HttpStatus.UNAUTHORIZED))
-                    // If login succeeds return a 200 instead of redirecting, as is normal for form login
-                    // We also return a JSON Web Token
-                    .successHandler(new JWTStatusHandler(jwtProvider))
                 // Configuring the HttpSecurity object is done in steps, we just configured the formLogin,
                 // now we're continuing to exception handling. To signal this, we need to use and(),
                 // otherwise we'd still be trying to configure formLogin.
                 .and()
-                    // What to do when it goes wrong?
+                // What to do when it goes wrong?
                     .exceptionHandling()
-                        // When the access is denied to a certain part of the application, use the given handler.
-                        .accessDeniedHandler(restAccessDeniedHandler)
-                        // When the given JWT is invalid, use this handler.
-                        .authenticationEntryPoint(restAuthenticationEntryPoint);
+                    // When the access is denied to a certain part of the application, use the given handler.
+                    .accessDeniedHandler(new UserAccessDeniedHandler())
+                    // When a user tries to reach an endpoint without a JWT, use the following handler.
+                    .authenticationEntryPoint(new UnauthenticatedHandler());
 
         // We need to register our JWTFilter. We register it before the UsernamePasswordAuthenticationFilter,
         // as that is part of the group of filters where Spring expects updates to the SecurityContextHolder

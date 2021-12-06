@@ -21,15 +21,15 @@ public class JWTProvider {
     // This is the algorithm we use for signing the JSON Web Token
     private static final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
     // We use this service to retrieve users
-    private final UserDetailsService myUserDetails;
+    private final UserDetailsService userDetailsService;
     // When we sign a JSON Web Token, we use a secret key so nobody can re-sign an edited token and present it as valid
     private String secretKey;
     // For how long do we want a token to stay valid?
     private long validityInMilliseconds = 600000; // 10 minutes
 
 
-    public JWTProvider(UserDetailsService myUserDetails, String secretKey) {
-        this.myUserDetails = myUserDetails;
+    public JWTProvider(UserDetailsService userDetailsService, String secretKey) {
+        this.userDetailsService = userDetailsService;
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
@@ -60,7 +60,7 @@ public class JWTProvider {
     public Authentication getAuthentication(String tokenString) {
         Claims claims = getClaims(tokenString);
         String user = claims.getSubject();
-        UserDetails userDetails = myUserDetails.loadUserByUsername(user);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user);
         return new UsernamePasswordAuthenticationToken(userDetails, "",
                 userDetails.getAuthorities());
     }

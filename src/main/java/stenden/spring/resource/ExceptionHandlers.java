@@ -2,6 +2,7 @@ package stenden.spring.resource;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +31,12 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
                 request.getRemoteAddr()
         );
         return new ErrorResponse(response);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ErrorResponse handleBadCredentialsException() {
+        return new ErrorResponse("Invalid credentials");
     }
 
     @Override

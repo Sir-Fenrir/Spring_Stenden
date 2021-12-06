@@ -18,14 +18,16 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     // We use the JWTProvider to verify tokens on incoming requests
-    private JWTProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
     public JWTFilter(JWTProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
 
     /**
-     * Execute the filter.
+     * Check whether the filter has a valid JSON Web Token.
+     * If so, we place an Authentication object in the {@link SecurityContextHolder}.
+     * If there is no valid JWT, the {@link SecurityContextHolder} stays empty.
      *
      * @param request  The HTTP Request that triggered this whole chain
      * @param response The response we'll be returning to the client
@@ -39,7 +41,7 @@ public class JWTFilter extends GenericFilterBean {
         // Get the token from the request
         String token = jwtProvider.getToken((HttpServletRequest) request);
         try {
-            // If there was a token and it is valid (e.g.: not expired)
+            // If there was a token, and it is valid (e.g.: not expired)
             if (token != null && jwtProvider.validateToken(token)) {
                 // Get the authentication instance and set it in the SecurityContext
                 Authentication authentication = jwtProvider.getAuthentication(token);
@@ -57,7 +59,8 @@ public class JWTFilter extends GenericFilterBean {
             SecurityContextHolder.clearContext();
         }
 
-        // Let the filter chain go on
+        // Let the filter chain go on, authentication failure should not stop the filter.
+        // It's up to Spring to decide whether the authentication in hte SecurityHolder is sufficient.
         chain.doFilter(request, response);
     }
 

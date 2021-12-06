@@ -9,14 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
+/**
+ * We use this class to send a response if
+ */
+public class UnauthenticatedHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse,
-            AuthenticationException e) throws IOException, ServletException {
+            AuthenticationException e) throws IOException {
         httpServletResponse.setStatus(401);
-        httpServletResponse.getWriter().write("{\"message\":\"You're not authorized.\"}");
+        httpServletResponse.getWriter().write("{\"message\":\"You're not authenticated.\"}");
     }
 }
