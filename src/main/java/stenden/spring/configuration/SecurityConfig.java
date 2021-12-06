@@ -53,6 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * To expose an UserDetailService in our application,
      * we can just override this method from the superclass.
+     * It will then create an UserDetailsService based on the
+     * AuthenticationManagerBuilder which we're configuring in
+     * {@link #configure(AuthenticationManagerBuilder)}.
      * <p>
      * We can also create our own UserDetailService if we so desire,
      * to customize how users are retrieved!
@@ -67,10 +70,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * We create the JWTProvider bean, which
+     * We create the JWTProvider bean, which is used for generating and verifying JWT's.
      *
-     * @param userDetailsService
-     * @param secretKey
+     * @param userDetailsService For retrieving the user while creating the JWT.
+     * @param secretKey The phrase used to encode the JWT in such a way only we can produce it.
      * @return
      */
     @Bean
@@ -104,7 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * We expose the AuthenticationManager to our application so we can use it to authenticate login requests
+     * We expose the AuthenticationManager to our application, so we can use it to authenticate login requests
      * @return
      * @throws Exception
      */
@@ -115,7 +118,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * In this method we get a {@link HttpSecurity} object we can use for configuring the security in our application.
+     * In this method we get a {@link HttpSecurity} object we can use for securing the access to our application.
+     * The previous ones were focused on the inner workings, but this one is for deciding what happens
+     * when a client sends us a message.
      * <p>
      * It's important to know that the top most configuration should be more specific than the bottom configuration.
      * If I say the url /admin is accessible by admins only and then say all the URLS are open for everyone,
@@ -128,6 +133,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // First we configure it to allow authentication and authorization in REST
+        // This is just a helper method made by me to split it up
         enableRESTAuthentication(http)
                 // Now let's say which requests we want to authorize
                 .authorizeRequests()

@@ -28,7 +28,6 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<Void> login(@RequestBody LoginDTO login) {
-        System.out.println(login);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
 
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
