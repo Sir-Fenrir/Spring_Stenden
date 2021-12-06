@@ -1,5 +1,6 @@
 package stenden.spring.it;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -10,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import stenden.spring.configuration.WebConfig;
+import stenden.spring.security.LoginDTO;
 
 import java.util.Arrays;
 
@@ -26,9 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {WebConfig.class, TestConfig.class})
-@WebAppConfiguration
+@SpringJUnitWebConfig(classes = {WebConfig.class, TestConfig.class})
 public class HouseControllerIntegrationTest {
 
     @Autowired
@@ -86,12 +87,9 @@ public class HouseControllerIntegrationTest {
 
     private ResultActions authenticate(String user, String password) throws Exception {
         return mockMvc.perform(
-                post("/login")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(EntityUtils.toString(new UrlEncodedFormEntity(Arrays.asList(
-                                new BasicNameValuePair("username", user),
-                                new BasicNameValuePair("password", password)
-                        ))))
+                post("/authenticate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(new LoginDTO(user, password)))
         );
     }
 
