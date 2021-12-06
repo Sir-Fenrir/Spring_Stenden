@@ -1,6 +1,7 @@
 package stenden.spring.resource;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +26,12 @@ public class ExceptionHandlers {
                 request.getRemoteAddr()
         );
         return new ErrorResponse(response);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ErrorResponse handleBadCredentialsException() {
+        return new ErrorResponse("Invalid credentials");
     }
 
 }

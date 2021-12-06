@@ -6,6 +6,8 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -29,11 +31,10 @@ public class DatabaseConfig {
      */
     @Bean
     public DataSource dataSource() throws SQLException {
-        MariaDbPoolDataSource dataSource = new MariaDbPoolDataSource();
-        dataSource.setUser("root");
-        dataSource.setPassword("root");
-        dataSource.setUrl("jdbc:mariadb://localhost:3306/example");
-        return dataSource;
+        return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
+                .addScript("classpath:schema.sql")
+                .addScript("classpath:insert-data.sql")
+                .build();
     }
 
     /**
